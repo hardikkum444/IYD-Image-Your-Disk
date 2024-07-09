@@ -19,7 +19,17 @@ def create_image(volume_loc, output_file, block_size=4096):
         target_file.close()
 
 
+def compress_disk_image(di_file):
+    compressed_file = di_file+".gz"
+    with open(di_file,'rb') as f_in:
+        with gzip.open(compressed_file,'wb') as f_out:
+            f_out.writelines(f_in)
+
+
+
+
 if __name__== "__main__":
     volume_loc = input("Enter location ")
-    output_file = "disk_image.raw"
+    output_file = "disk_image.dd"
     create_image(volume_loc,output_file)
+    compress_disk_image(output_file)

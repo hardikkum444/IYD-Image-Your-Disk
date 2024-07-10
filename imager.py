@@ -1,3 +1,4 @@
+
 import pytsk3
 import os
 import gzip
@@ -8,6 +9,7 @@ import sys
 from tqdm import tqdm
 import hashlib
 import subprocess
+
 
 def create_image(volume_loc, output_file, block_size=4096):
     img_info = pytsk3.Img_Info(volume_loc)
@@ -62,8 +64,23 @@ def encrypt_with_gpg(input_file, output_file):
 
     subprocess.run(encrypt_command)
 
+# def decrypt_with_gpg(input_file, output_file):
+#     passphrase = "your_passphrase"
+#
+#     decrypt_command = [
+#         "gpg",
+#         "--output", output_file,
+#         "--decrypt",
+#         input_file
+#     ]
+#
+#     subprocess.run(decrypt_command)
+#
+# def decrypt_with_gpg(input_file, output_file):
+#     passphrase = input("Enter decryption passphrase: ")
+
 def decrypt_with_gpg(input_file, output_file):
-    passphrase = "your_passphrase"
+    passphrase = input("Enter decryption passphrase: ")
 
     decrypt_command = [
         "gpg",
@@ -74,8 +91,12 @@ def decrypt_with_gpg(input_file, output_file):
         input_file
     ]
 
-    subprocess.run(decrypt_command)
-
+    try:
+        subprocess.run(decrypt_command, check=True)
+        print(f"Decryption successful. Decrypted file saved as {output_file}")
+    except subprocess.CalledProcessError as e:
+        print("Error: Failed to decrypt")
+        exit(0)
 
 
 def calculate_hash(filename, dir_name):
@@ -107,25 +128,73 @@ def calculate_hash(filename, dir_name):
 
 
 if __name__ == "__main__":
-    volume_loc = input("Enter location: ")
-    name = input("What name would you like the image to be saved under? ")
-    file_name = input("Enter directory name to store in ")
-    if not os.path.exists(file_name):
-        os.makedirs(file_name, mode=0o755)
-        os.chmod(file_name, 0o777)
-    output_file = file_name+"/"+name+".raw"
-    create_image(volume_loc, output_file)
-    calculate_hash(output_file,file_name)
-    compress_disk_image(output_file)
 
-    ch2 = input("Would you like encryption through GPG? (y/n) ")
+    ch0 = input("Would you like to decrypt encrypted RAW file? (y/n) ")
 
-    if(ch2.lower() == "y"):
-        print("WARNING! Encryption may cause data integrity hinderance")
-        encrypt_with_gpg(output_file+".gz", file_name+"/encrypted_image.gpg")
-        ch3 = input("Would you like the not-encrypted file to be deleted? (y/n) ")
-        if(ch3.lower() == "y"):
-            os.remove(output_file+".gz")
-        print("Encryption successful")
+    if (ch0.lower() == "y"):
+        e_file_name = input("Enter encrypted file name (ex: dir/encrypted_file.gpg) ")
+        d_file_name = input("What would you like decrypted file to be saved as? ")
 
-    #sudo mount -o loop,offset=491520 disk_image.raw /mnt
+        if ".raw.gz" in d_file_name:
+            decrypt_with_gpg(e_file_name, d_file_name)
+        else:
+            decrypt_with_gpg(e_file_name, d_file_name+".raw.gz")
+
+        print("De-compressing ...")
+        decomp = f"gzip -d {d_file_name}.raw.gz"
+        try:
+            subprocess.run(decomp, shell=True, check=True)
+            print("successfully decompressed")
+        except subprocess.CalledProcessError as e:
+            print("decompression issue please check if gzip is installed")
+
+
+    chn = input("Would you like to mount RAW file to view contents? (y/n) ")
+
+    if(chn.lower() == "y"):
+
+        offset = input("Enter offset ")
+        image_file = input("Enter location of image file (ex: /dir/image.raw) ")
+        mount_point = "/mnt"
+
+        ro = input("Would you like to mount as read only? (y/n) ")
+        if(ro.lower() == "y"):
+            mount_command = f"sudo mount -o loop,offset={offset} {image_file} {mount_point}"
+        if(ro.lower() == "n"):
+            mount_command = f"sudo mount -o loop,offset={offset},ro {image_file} {mount_point}"
+
+        try:
+            subprocess.run(mount_command, shell=True, check=True)
+            print("Mounted successfully, please check at /mnt")
+        except subprocess.CalledProcessError as e:
+            print("Error: Failed to mount")
+
+    IYD = input("Would you like to create a fresh image? (y/n)")
+    if(IYD.lower() == "y"):
+        print("Welcome to the Imaging process")
+
+        volume_loc = input("Enter location of drive (/dev/sdx): ")
+        name = input("What name would you like the image to be saved under? ")
+        file_name = input("Enter directory name to store in ")
+        if not os.path.exists(file_name):
+            os.makedirs(file_name, mode=0o755)
+            os.chmod(file_name, 0o777)
+        output_file = file_name+"/"+name+".raw"
+        create_image(volume_loc, output_file)
+        calculate_hash(output_file,file_name)
+        compress_disk_image(output_file)
+
+        ch2 = input("Would you like encryption through GPG? (y/n) ")
+
+        if(ch2.lower() == "y"):
+            print("WARNING! Encryption may cause data integrity hinderance")
+            encrypt_with_gpg(output_file+".gz", file_name+"/encrypted_image.gpg")
+            ch3 = input("Would you like the not-encrypted file to be deleted? (y/n) ")
+            if(ch3.lower() == "y"):
+                os.remove(output_file+".gz")
+            print("Encryption successful")
+
+    else:
+        print("Thank you for using IYD!")
+
+#sudo mount -o loop,offset=491520 disk_image.raw /mnt

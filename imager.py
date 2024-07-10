@@ -49,15 +49,35 @@ def loading():
     sys.stdout.write('\rDone!     ')
 
 
-def calculate_hash(file_name):
+def calculate_hash(filename, dir_name):
     md5 = hashlib.md5()
     sha1 = hashlib.sha1()
-    with open(file_name,"rb") as f:
+    with open(filename,"rb") as f:
         for part in iter(lambda: f.read(4096), b""):
             md5.update(part)
             sha1.update(part)
     print(md5.hexdigest())
     print(sha1.hexdigest())
+
+    with open(dir_name+'/data.txt', 'w') as f:
+        data = f"Image-your-disk -- Disk Imaging tool but in Python!\nAuto-Generated Report:\n-------------------------------------------------------------------------------\n\nCalculated md5 hash: {md5.hexdigest()}\nCalculated SHA1 hash: {sha1.hexdigest()}"
+        f.write(data)
+
+
+    ch = input("Would you like to add case information (y/n)")
+
+    if(ch.lower() == "y"):
+        case_no = input("Case Number: ")
+        evd_no = input("Evidence Number: ")
+        unq_desc = input("Unique Description: ")
+        examiner = input("Examiner: ")
+        notes = input("Notes: ")
+        with open(dir_name+'/data.txt', 'a') as f:
+            data = f"\nCase Number: {case_no}\nEvidence Number: {evd_no}\nUnique Description: {unq_desc}\nExaminer: {examiner}\nNotes: {notes}\n"
+            f.write(data)
+
+
+
 
 
 if __name__ == "__main__":
@@ -68,7 +88,7 @@ if __name__ == "__main__":
         os.chmod(file_name, 0o777)
     output_file = file_name+"/disk_image.raw"
     create_image(volume_loc, output_file)
-    calculate_hash(output_file)
+    calculate_hash(output_file,file_name)
     compress_disk_image(output_file)
 
     #sudo mount -o loop,offset=491520 disk_image.raw /mnt

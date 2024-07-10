@@ -7,6 +7,7 @@ import time
 import sys
 from tqdm import tqdm
 import hashlib
+import subprocess
 
 def create_image(volume_loc, output_file, block_size=4096):
     img_info = pytsk3.Img_Info(volume_loc)
@@ -49,6 +50,34 @@ def loading():
     sys.stdout.write('\rDone!     ')
 
 
+def encrypt_with_gpg(input_file, output_file):
+
+    encrypt_command = [
+        "gpg",
+        "--output", output_file,
+        "--symmetric",
+        "--cipher-algo", "AES256",
+        input_file
+    ]
+
+    subprocess.run(encrypt_command)
+
+def decrypt_with_gpg(input_file, output_file):
+    passphrase = "your_passphrase"
+
+    decrypt_command = [
+        "gpg",
+        "--output", output_file,
+        "--decrypt",
+        "--batch",
+        "--passphrase", passphrase,
+        input_file
+    ]
+
+    subprocess.run(decrypt_command)
+
+
+
 def calculate_hash(filename, dir_name):
     md5 = hashlib.md5()
     sha1 = hashlib.sha1()
@@ -60,11 +89,11 @@ def calculate_hash(filename, dir_name):
     print(sha1.hexdigest())
 
     with open(dir_name+'/data.txt', 'w') as f:
-        data = f"Image-your-disk -- Disk Imaging tool but in Python!\nAuto-Generated Report:\n-------------------------------------------------------------------------------\n\nCalculated md5 hash: {md5.hexdigest()}\nCalculated SHA1 hash: {sha1.hexdigest()}"
+        data = f"Image-your-disk -- Disk Imaging tool but in Python!\nAuto-Generated Report:\n-------------------------------------------------------------------------------\n\nCalculated md5 hash: {md5.hexdigest()}\nCalculated SHA1 hash: {sha1.hexdigest()}\n"
         f.write(data)
 
 
-    ch = input("Would you like to add case information (y/n)")
+    ch = input("Would you like to add case information? (y/n) ")
 
     if(ch.lower() == "y"):
         case_no = input("Case Number: ")
@@ -77,18 +106,26 @@ def calculate_hash(filename, dir_name):
             f.write(data)
 
 
-
-
-
 if __name__ == "__main__":
     volume_loc = input("Enter location: ")
-    file_name = input("Enter file name to store in ")
+    name = input("What name would you like the image to be saved under? ")
+    file_name = input("Enter directory name to store in ")
     if not os.path.exists(file_name):
         os.makedirs(file_name, mode=0o755)
         os.chmod(file_name, 0o777)
-    output_file = file_name+"/disk_image.raw"
+    output_file = file_name+"/"+name+".raw"
     create_image(volume_loc, output_file)
     calculate_hash(output_file,file_name)
     compress_disk_image(output_file)
+
+    ch2 = input("Would you like encryption through GPG? (y/n) ")
+
+    if(ch2.lower() == "y"):
+        print("WARNING! Encryption may cause data integrity hinderance")
+        encrypt_with_gpg(output_file+".gz", file_name+"/encrypted_image.gpg")
+        ch3 = input("Would you like the not-encrypted file to be deleted? (y/n) ")
+        if(ch3.lower() == "y"):
+            os.remove(output_file+".gz")
+        print("Encryption successful")
 
     #sudo mount -o loop,offset=491520 disk_image.raw /mnt

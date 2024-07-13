@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IYD Auto-generated report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: #f5f5f5;
+            padding: 20px;
+            margin: 0;
+            font-size: 11px;
+        }
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+
+        .download-link {
+        	font-size: 12px;
+        }
+        
+        table {
+            width: 100%;
+            margin-bottom: 10px;
+            border-collapse: collapse;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+        th, td {
+            padding: 2px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        img {
+            max-width: 100px;
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>IYD Auto-generated report</h1>
+
+        <div class="download-link">
+        	<a href="#" id="downloadLink">Download Report as Text File</a><br><br>
+        </div>
+        
+        <table>
+            <tr>
+                <th colspan="2">Image Information</th>
+            </tr>
+            <tr>
+                <td>Image name:</td>
+                <td>{{ image_name }}</td>
+            </tr>
+            <tr>
+                <td>Imaging Start Time:</td>
+                <td>{{ start_time }}</td>
+            </tr>
+            <tr>
+                <td>Imaging End Time:</td>
+                <td>{{ end_time }}</td>
+            </tr>
+            <tr>
+                <td>Image type/format:</td>
+                <td>{{ image_type }}</td>
+            </tr>        
+        </table>
+
+        <table>
+            <tr>
+                <th colspan="2">Case Information</th>
+            </tr>
+            <tr>
+                <td>Case Number:</td>
+                <td>{{ case_no }}</td>
+            </tr>
+            <tr>
+                <td>Evidence Number:</td>
+                <td>{{ evd_no }}</td>
+            </tr>
+            <tr>
+                <td>Description:</td>
+                <td>{{ desc }}</td>
+            </tr>
+            <tr>
+                <td>Examiner:</td>
+                <td>{{ examiner }}</td>
+            </tr>
+            <tr>
+                <td>Notes:</td>
+                <td>{{ notes }}</td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <th colspan="2">Physical Evidentiary Item (Source) Information</th>
+            </tr>
+            <tr>
+                <td colspan="2"><strong>[Drive Geometry]</strong></td>
+            </tr>
+            <tr>
+                <td>Cylinders:</td>
+                <td>{{ cylinders }}</td>
+            </tr>
+            <tr>
+                <td>Tracks per Cylinder:</td>
+                <td>{{ tracks_per_cylinder }}</td>
+            </tr>
+            <tr>
+                <td>Sectors per Track:</td>
+                <td>{{ sectors_per_track }}</td>
+            </tr>
+            <tr>
+                <td>Bytes per Sector:</td>
+                <td>{{ bytes_per_sector }}</td>
+            </tr>
+            <tr>
+                <td>Sector Count:</td>
+                <td>{{ sector_count }}</td>
+            </tr>
+
+            <tr>
+                <td colspan="2"><strong>[Physical Drive Info]</strong></td>
+            </tr>
+            <tr>
+                <td>Drive Model:</td>
+                <td>{{ drive_model }}</td>
+            </tr>
+            <tr>
+                <td>Drive Serial Number:</td>
+                <td>{{ drive_serial_number }}</td>
+            </tr>
+            <tr>
+                <td>Drive Interface Type:</td>
+                <td>{{ drive_interface_type }}</td>
+            </tr>
+            <tr>
+                <td>Source Data Size:</td>
+                <td>{{ source_data_size }}</td>
+            </tr>
+            <tr>
+                <td>Sector Count:</td>
+                <td>{{ sector_count }}</td>
+            </tr>
+
+            <tr>
+                <td colspan="2"><strong>[Computed Hashes]</strong></td>
+            </tr>
+            <tr>
+                <td>MD5 Hash:</td>
+                <td>{{ md5_hash }}</td>
+            </tr>
+            <tr>
+                <td>SHA-1 Hash:</td>
+                <td>{{ sha1_hash }}</td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <th colspan="2">Image Information</th>
+            </tr>
+            <tr>
+                <td>Aquisition Started:</td>
+                <td>{{ aq_started }}</td>
+            </tr>
+            <tr>
+                <td>Aquisition Ended:</td>
+                <td>{{ aq_ended }}</td>
+            </tr>
+        </table>
+
+        <table>
+            <tr>
+                <th colspan="2">Image Verification Results</th>
+            </tr>
+            <tr>
+                <td>Verification Started:</td>
+                <td>{{ ve_started }}</td>
+            </tr>
+            <tr>
+                <td>Verification Ended:</td>
+                <td>{{ ve_ended }}</td>
+            </tr>
+            <tr>
+                <td>MD5 Hash:</td>
+                <td>{{ img_md5_hash }}</td>
+            </tr>
+            <tr>
+                <td>SHA1 Hash:</td>
+                <td>{{ img_sha1_hash }}</td>
+            </tr>
+        </table>
+        
+
+    <script>
+        function downloadReport() {
+      
+            var reportContent = generateReportContent();
+
+            var blob = new Blob([reportContent], { type: 'text/plain' });
+
+            var downloadLink = document.getElementById('downloadLink');
+            downloadLink.href = URL.createObjectURL(blob);
+            downloadLink.download = 'iyd_report.txt'; // Filename to download
+
+            downloadLink.click(); // Uncomment this line to automatically start download 
+        }
+
+        function generateReportContent() {
+            var content = '';
+            
+            content += 'IYD Auto-generated Report:\n\n';
+            
+            content += 'Image Information:\n';
+            content += 'Image name: ' + '{{ image_name }}' + '\n';
+            content += 'Imaging Start Time: ' + '{{ start_time }}' + '\n';
+            content += 'Imaging End Time: ' + '{{ end_time }}' + '\n\n';
+            
+            content += 'Case Information:\n';
+            content += 'Case Number: ' + '{{ case_no }}' + '\n';
+            content += 'Evidence Number: ' + '{{ evd_no }}' + '\n';
+            content += 'Description: ' + '{{ desc }}' + '\n';
+            content += 'Examiner: ' + '{{ examiner }}' + '\n';
+            content += 'Notes: ' + '{{ notes }}' + '\n\n';
+            
+            content += 'Physical Evidentiary Item (Source) Information:\n';
+            content += '[Drive Geometry]\n';
+            content += 'Cylinders: ' + '{{ cylinders }}' + '\n';
+            content += 'Tracks per Cylinder: ' + '{{ tracks_per_cylinder }}' + '\n';
+            content += 'Sectors per Track: ' + '{{ sectors_per_track }}' + '\n';
+            content += 'Bytes per Sector: ' + '{{ bytes_per_sector }}' + '\n';
+            content += 'Sector Count: ' + '{{ sector_count }}' + '\n\n';
+            
+            content += '[Physical Drive Info]\n';
+            content += 'Drive Model: ' + '{{ drive_model }}' + '\n';
+            content += 'Drive Serial Number: ' + '{{ drive_serial_number }}' + '\n';
+            content += 'Drive Interface Type: ' + '{{ drive_interface_type }}' + '\n';
+            content += 'Source Data Size: ' + '{{ source_data_size }}' + '\n';
+            content += 'Sector Count: ' + '{{ sector_count }}' + '\n\n';
+
+            content += '[Computed Hashes]\n';
+            content += 'MD5 Hash: ' + '{{ md5_hash }}' + '\n';
+            content += 'SHA1 Hash: '+ '{{ sha1_hash }}' + '\n';
+
+            content += 'Image Information:\n';
+            content += 'Aquisation Started: ' + '{{ aq_started }}' + '\n';
+            content += 'Aquisation Ended: ' + '{{ aq_ended }}' + '\n\n';
+
+			content += 'Image Verification Results:\n';
+			content += 'Verification Started: ' + '{{ ve_started }}' + '\n';
+			content += 'Verification Ended: ' + '{{ ve_ended }}' + '\n';
+			content += 'MD5 hash: ' + '{{ img_md5_hash }}' + '\n';
+			content += 'SHA1 hash: ' + '{{ img_sha1_hash }}' + '\n\n';
+			
+            
+            return content;
+        }
+
+       
+        document.getElementById('downloadLink').addEventListener('click', downloadReport);
+    </script>
+</body>
+</html>

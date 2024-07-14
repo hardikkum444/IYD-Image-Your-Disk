@@ -24,9 +24,9 @@
         }
 
         .download-link {
-        	font-size: 12px;
+            font-size: 12px;
         }
-        
+
         table {
             width: 100%;
             margin-bottom: 10px;
@@ -61,9 +61,9 @@
         <h1>IYD Auto-generated report</h1>
 
         <div class="download-link">
-        	<a href="#" id="downloadLink">Download Report as Text File</a><br><br>
+            <a href="#" id="downloadLink">Download Report as Text File</a><br><br>
         </div>
-        
+
         <table>
             <tr>
                 <th colspan="2">Image Information</th>
@@ -83,7 +83,7 @@
             <tr>
                 <td>Image type/format:</td>
                 <td>{{ image_type }}</td>
-            </tr>        
+            </tr>
         </table>
 
         <table>
@@ -117,27 +117,27 @@
                 <th colspan="2">Physical Evidentiary Item (Source) Information</th>
             </tr>
             <tr>
-                <td colspan="2"><strong>[Drive Geometry]</strong></td>
+                <td colspan="2"><strong>[Drive Geometry (LBM)]</strong></td>
             </tr>
             <tr>
-                <td>Cylinders:</td>
-                <td>{{ cylinders }}</td>
+                <td>Sector Size / Physical Block Size:</td>
+                <td>{{ physical_block_size }}</td>
             </tr>
             <tr>
-                <td>Tracks per Cylinder:</td>
-                <td>{{ tracks_per_cylinder }}</td>
+                <td>Logical Block Size:</td>
+                <td>{{ logical_block_size }}</td>
             </tr>
             <tr>
-                <td>Sectors per Track:</td>
-                <td>{{ sectors_per_track }}</td>
+                <td>Total Sectors:</td>
+                <td>{{ total_sectors }}</td>
             </tr>
             <tr>
                 <td>Bytes per Sector:</td>
                 <td>{{ bytes_per_sector }}</td>
             </tr>
             <tr>
-                <td>Sector Count:</td>
-                <td>{{ sector_count }}</td>
+                <td><u><strong>Partition Information:<strong></u></td>
+                <td>{{ partition_information | safe }}</td>
             </tr>
 
             <tr>
@@ -152,12 +152,12 @@
                 <td>{{ drive_serial_number }}</td>
             </tr>
             <tr>
-                <td>Drive Interface Type:</td>
-                <td>{{ drive_interface_type }}</td>
+                <td>Partitioning Scheme:</td>
+                <td>{{ partition_table }}</td>
             </tr>
             <tr>
-                <td>Source Data Size:</td>
-                <td>{{ source_data_size }}</td>
+                <td>Storage Occupied:</td>
+                <td>{{ source_data_size }} bytes</td>
             </tr>
             <tr>
                 <td>Sector Count:</td>
@@ -168,11 +168,11 @@
                 <td colspan="2"><strong>[Computed Hashes]</strong></td>
             </tr>
             <tr>
-                <td>MD5 Hash:</td>
+                <td>Drive MD5 Hash (Computed Just Before Imaging):</td>
                 <td>{{ md5_hash }}</td>
             </tr>
             <tr>
-                <td>SHA-1 Hash:</td>
+                <td>Drive SHA-1 Hash (Computed Just Before Imaging):</td>
                 <td>{{ sha1_hash }}</td>
             </tr>
         </table>
@@ -212,11 +212,10 @@
                 <td>{{ img_sha1_hash }}</td>
             </tr>
         </table>
-        
+    </div>
 
     <script>
         function downloadReport() {
-      
             var reportContent = generateReportContent();
 
             var blob = new Blob([reportContent], { type: 'text/plain' });
@@ -225,61 +224,63 @@
             downloadLink.href = URL.createObjectURL(blob);
             downloadLink.download = 'iyd_report.txt'; // Filename to download
 
-            downloadLink.click(); // Uncomment this line to automatically start download 
+            // Uncomment the next line to automatically start download
+            downloadLink.click();
         }
 
         function generateReportContent() {
             var content = '';
-            
+
             content += 'IYD Auto-generated Report:\n\n';
-            
+
             content += 'Image Information:\n';
             content += 'Image name: ' + '{{ image_name }}' + '\n';
             content += 'Imaging Start Time: ' + '{{ start_time }}' + '\n';
-            content += 'Imaging End Time: ' + '{{ end_time }}' + '\n\n';
-            
+            content += 'Imaging End Time: ' + '{{ end_time }}' + '\n';
+            content += 'Image type/format: ' + '{{ image_type}}' + '\n\n';
+
             content += 'Case Information:\n';
             content += 'Case Number: ' + '{{ case_no }}' + '\n';
             content += 'Evidence Number: ' + '{{ evd_no }}' + '\n';
             content += 'Description: ' + '{{ desc }}' + '\n';
             content += 'Examiner: ' + '{{ examiner }}' + '\n';
             content += 'Notes: ' + '{{ notes }}' + '\n\n';
-            
+
             content += 'Physical Evidentiary Item (Source) Information:\n';
             content += '[Drive Geometry]\n';
-            content += 'Cylinders: ' + '{{ cylinders }}' + '\n';
-            content += 'Tracks per Cylinder: ' + '{{ tracks_per_cylinder }}' + '\n';
-            content += 'Sectors per Track: ' + '{{ sectors_per_track }}' + '\n';
+            content += 'Sector Size / Physical Block Size: ' + '{{ physical_block_size }}' + '\n';
+            content += 'Logical Block Size: ' + '{{ logical_block_size }}' + '\n';
+            content += 'Total Sectors: ' + '{{ total_sectors }}' + '\n';
             content += 'Bytes per Sector: ' + '{{ bytes_per_sector }}' + '\n';
-            content += 'Sector Count: ' + '{{ sector_count }}' + '\n\n';
-            
+            content += 'Partition Information: ' + '{{ partition_information }}' + '\n\n';
+
             content += '[Physical Drive Info]\n';
             content += 'Drive Model: ' + '{{ drive_model }}' + '\n';
             content += 'Drive Serial Number: ' + '{{ drive_serial_number }}' + '\n';
-            content += 'Drive Interface Type: ' + '{{ drive_interface_type }}' + '\n';
+            content += 'Partitioning Scheme: ' + '{{ partition_table }}' + '\n';
             content += 'Source Data Size: ' + '{{ source_data_size }}' + '\n';
             content += 'Sector Count: ' + '{{ sector_count }}' + '\n\n';
 
             content += '[Computed Hashes]\n';
-            content += 'MD5 Hash: ' + '{{ md5_hash }}' + '\n';
-            content += 'SHA1 Hash: '+ '{{ sha1_hash }}' + '\n';
+            content += 'Drive MD5 Hash (Computed Just Before Imaging): ' + '{{ md5_hash }}' + '\n';
+            content += 'Drive SHA1 Hash (Computed Just Before Imaging): '+ '{{ sha1_hash }}' + '\n';
 
             content += 'Image Information:\n';
-            content += 'Aquisation Started: ' + '{{ aq_started }}' + '\n';
-            content += 'Aquisation Ended: ' + '{{ aq_ended }}' + '\n\n';
+            content += 'Aquisition Started: ' + '{{ aq_started }}' + '\n';
+            content += 'Aquisition Ended: ' + '{{ aq_ended }}' + '\n\n';
 
-			content += 'Image Verification Results:\n';
-			content += 'Verification Started: ' + '{{ ve_started }}' + '\n';
-			content += 'Verification Ended: ' + '{{ ve_ended }}' + '\n';
-			content += 'MD5 hash: ' + '{{ img_md5_hash }}' + '\n';
-			content += 'SHA1 hash: ' + '{{ img_sha1_hash }}' + '\n\n';
-			
-            
+            content += 'Image Verification Results:\n';
+            content += 'Verification Started: ' + '{{ ve_started }}' + '\n';
+            content += 'Verification Ended: ' + '{{ ve_ended }}' + '\n';
+            content += 'MD5 hash: ' + '{{ img_md5_hash }}' + '\n';
+            content += 'SHA1 hash: ' + '{{ img_sha1_hash }}' + '\n\n';
+
             return content;
         }
 
-       
-        document.getElementById('downloadLink').addEventListener('click', downloadReport);
+        window.onload = function() {
+            document.getElementById('downloadLink').addEventListener('click', downloadReport);
+        };
     </script>
 </body>
 </html>

@@ -296,7 +296,7 @@ def create_image(volume_loc, output_file, block_size=1024):
 
 
 
-    return start_time, end_time, drive_md5, drive_sha1
+    return start_time, end_time, drive_md5.hexdigest(), drive_sha1.hexdigest()
 
 
 

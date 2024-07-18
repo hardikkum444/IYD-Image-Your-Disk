@@ -1,5 +1,6 @@
 from pathlib import Path
 from pathlib import Path
+import subprocess
 from tkinter import *
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 # from tkinter import *
@@ -24,7 +25,7 @@ def relative_to_assets(path: str) -> Path:
 
 
 window = Tk()
-
+window.title("IYD Imaging Process")
 center_window(window)
 window.geometry("600x500")
 window.configure(bg = "#545252")
@@ -124,9 +125,19 @@ def on_next_click():
         # sys.path.append("build")
         import gui4
 
-next_button = Button(window, text="Next", command=on_next_click, width=10, bg="#333333", fg="white")
-next_button.place(x=382, y=389)
+def on_back_click():
+    window.destroy()
+    import sys
+    # sys.path.append("build")
+    # import gui2
+    subprocess.run(["python3", "gui2.py"])
 
+
+next_button = Button(window, text="Next", command=on_next_click, width=10, bg="#333333", fg="white")
+next_button.place(x=452, y=389)
+
+back_button = Button(window, text="Back", command=on_back_click, width=10, bg="#333333", fg="white")
+back_button.place(x=312, y=389)
 
 window.resizable(False, False)
 window.mainloop()

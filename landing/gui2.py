@@ -2,6 +2,7 @@ from pathlib import Path
 # from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
+from tkinter import font as tkfont
 
 
 OUTPUT_PATH = Path(__file__).parent
@@ -63,14 +64,22 @@ canvas.create_rectangle(
     fill="#545252",
     outline="")
 
+large_font = tkfont.Font(family="Helvetica", size=16, weight="bold")
+
 button_image_1 = PhotoImage(
     file=relative_to_assets("button_1.png"))
 button_1 = Button(
-    image=button_image_1,
+    window,
+    text="CREATE IMAGE",
+    font=large_font,
+    # image=button_image_1,
     borderwidth=0,
     highlightthickness=0,
+    highlightbackground="#6C6C6C",
     command=create_image,
-    relief="flat"
+    relief="flat",
+    bg="#545252",
+    fg="white"
 )
 button_1.place(
     x=300.0,
@@ -82,10 +91,15 @@ button_1.place(
 button_image_2 = PhotoImage(
     file=relative_to_assets("button_2.png"))
 button_2 = Button(
-    image=button_image_2,
+    # image=button_image_2,
     borderwidth=0,
+    text="DECRYPT RAW IMAGE",
     highlightthickness=0,
-    relief="flat"
+    highlightbackground="#6C6C6C",
+    relief="flat",
+    font=large_font,
+    bg="#545252",
+    fg="white"
 )
 button_2.place(
     x=300.0,
@@ -97,10 +111,15 @@ button_2.place(
 button_image_3 = PhotoImage(
     file=relative_to_assets("button_3.png"))
 button_3 = Button(
-    image=button_image_3,
+    # image=button_image_3,
     borderwidth=0,
+    text="MOUNT IMAGE",
     highlightthickness=0,
-    relief="flat"
+    highlightbackground="#6C6C6C",
+    relief="flat",
+    font=large_font,
+    bg="#545252",
+    fg="white"
 )
 button_3.place(
     x=300.0,
@@ -112,10 +131,15 @@ button_3.place(
 button_image_4 = PhotoImage(
     file=relative_to_assets("button_4.png"))
 button_4 = Button(
-    image=button_image_4,
+    # image=button_image_4,
     borderwidth=0,
+    text="GET DRIVE REPORT",
     highlightthickness=0,
-    relief="flat"
+    highlightbackground="#6C6C6C",
+    relief="flat",
+    font=large_font,
+    bg="#545252",
+    fg="white"
 )
 button_4.place(
     x=300.0,

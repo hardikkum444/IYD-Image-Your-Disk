@@ -1,6 +1,9 @@
 from pathlib import Path
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog
 
+# from tkinter import *
+# Explicit imports to satisfy Flake8
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog
+import subprocess
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"/home/man44/Documents/imager/landing/assets4/frame0")
@@ -19,7 +22,7 @@ def relative_to_assets(path: str) -> Path:
 
 
 window = Tk()
-
+window.title("IYD Imaging Process")
 center_window(window)
 window.geometry("600x500")
 window.configure(bg = "#545252")
@@ -103,8 +106,8 @@ entry_bg_1 = canvas.create_image(
 def browse_file1():
     file_path = filedialog.askopenfilename()
     if file_path:
-        # entry_1.delete(0, Tk.END)
-        entry_1.insert(0, file_path)
+        # entry_1.delete(0, Tk.END)  # Clear any existing text
+        entry_1.insert(0, file_path)  # Insert the selected file path
 
 def browse_file3():
     file_path = filedialog.askdirectory()
@@ -184,8 +187,18 @@ entry_3.place(
 def on_next_click():
     print("Next button clicked")
 
+def on_back_click():
+    window.destroy()
+    import sys
+    # sys.path.append("build")
+    # import gui3
+    subprocess.run(["python3", "gui3.py"])
+
 next_button = Button(window, text="Next", command=on_next_click, width=10, bg="#333333", fg="white")
-next_button.place(x=382, y=415)
+next_button.place(x=452, y=415)
+
+back_button = Button(window, text="Back", command=on_back_click, width=10, bg="#333333", fg="white")
+back_button.place(x=312, y=415)
 
 window.resizable(False, False)
 window.mainloop()

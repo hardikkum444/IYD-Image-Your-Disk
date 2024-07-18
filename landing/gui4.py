@@ -1,9 +1,12 @@
 from pathlib import Path
-
+import threading
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog, Label
 import subprocess
+import createim
+import tkinter as tk
+from tkinter import ttk
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"/home/man44/Documents/imager/landing/assets4/frame0")
@@ -183,9 +186,38 @@ entry_3.place(
     height=31.0
 )
 
+final_name = entry_2.get()+"/"+entry_3.get()
+
+def main_win():
+    def create_image_task():
+            progress_bar.start(10)
+            start, end, md5, sh1 = createim.create_image(entry_1.get(), final_name)
+            progress_label.config(text="Completed!")
+            progress_bar.stop()
+            window.destroy()
+
+    window = tk.Tk()
+    window.title("IYD-Creating Image")
+    center_window(window)
+    window.geometry("300x150")
+
+    style = ttk.Style()
+    style.configure("TProgressbar", thickness=20)
+
+    progress_label = Label(window, text="Progressing...", font=("Arial", 12))
+    progress_label.pack(pady=10)
+
+    progress_bar = ttk.Progressbar(window, style="TProgressbar", orient="horizontal", length=250, mode="indeterminate")
+    progress_bar.pack(pady=20)
+
+    threading.Thread(target=create_image_task).start()
+
+    window.mainloop()
 
 def on_next_click():
     print("Next button clicked")
+    # createim.create_image(entry_1.get(),entry_2.get(),entry_2.get())
+    main_win()
 
 def on_back_click():
     window.destroy()

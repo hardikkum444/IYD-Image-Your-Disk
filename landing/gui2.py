@@ -4,7 +4,6 @@ from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from tkinter import font as tkfont
 
-
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"/home/man44/Documents/imager/landing/assets2/frame0")
 
@@ -64,7 +63,7 @@ canvas.create_rectangle(
     fill="#545252",
     outline="")
 
-large_font = tkfont.Font(family="Helvetica", size=16, weight="bold")
+large_font = tkfont.Font(family="JetBrains Mono", size=16, weight="bold")
 
 button_image_1 = PhotoImage(
     file=relative_to_assets("button_1.png"))
@@ -78,7 +77,7 @@ button_1 = Button(
     highlightbackground="#6C6C6C",
     command=create_image,
     relief="flat",
-    bg="#545252",
+    bg="#6C6C6C",
     fg="white"
 )
 button_1.place(
@@ -98,7 +97,7 @@ button_2 = Button(
     highlightbackground="#6C6C6C",
     relief="flat",
     font=large_font,
-    bg="#545252",
+    bg="#6C6C6C",
     fg="white"
 )
 button_2.place(
@@ -118,7 +117,7 @@ button_3 = Button(
     highlightbackground="#6C6C6C",
     relief="flat",
     font=large_font,
-    bg="#545252",
+    bg="#6C6C6C",
     fg="white"
 )
 button_3.place(
@@ -138,7 +137,7 @@ button_4 = Button(
     highlightbackground="#6C6C6C",
     relief="flat",
     font=large_font,
-    bg="#545252",
+    bg="#6C6C6C",
     fg="white"
 )
 button_4.place(

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from tkinter import *
+# from tkinter import *
 # Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
 
@@ -33,10 +33,9 @@ def open_page2():
     else:
         messagebox.showwarning("Warning", "Inavlid Username Password!")
 
-
 window = Tk()
 window.title("IYD")
-window.configure(bg = "#F2F2F2")
+window.configure(bg = "#C4C4C4")
 center_window(window)
 window.geometry("600x500")
 
@@ -44,7 +43,7 @@ window.geometry("600x500")
 
 canvas = Canvas(
     window,
-    bg = "#F2F2F2",
+    bg = "#C4C4C4",
     height = 500,
     width = 600,
     bd = 0,
@@ -53,100 +52,51 @@ canvas = Canvas(
 )
 
 canvas.place(x = 0, y = 0)
-canvas.create_rectangle(
-    0.0,
-    280.0,
-    600.0,
-    505.0,
-    fill="#535151",
-    outline="")
-
-canvas.create_rectangle(
-    127.0,
-    326.0,
-    412.0,
-    479.0,
-    fill="#545252",
-    outline="")
-
 image_image_1 = PhotoImage(
     file=relative_to_assets("image_1.png"))
 image_1 = canvas.create_image(
-    474.0,
-    157.0,
+    170.0,
+    142.0,
     image=image_image_1
 )
+
+canvas.create_rectangle(
+    325.0,
+    0.0,
+    600.0,
+    500.0,
+    fill="#222222",
+    outline="")
 
 image_image_2 = PhotoImage(
     file=relative_to_assets("image_2.png"))
 image_2 = canvas.create_image(
-    182.0,
-    168.0,
+    463.0,
+    172.0,
     image=image_image_2
 )
 
 canvas.create_rectangle(
-    152.0,
-    360.0,
-    384.0,
-    395.0,
+    347.0,
+    237.0,
+    579.0,
+    272.0,
     fill="#D9D9D9",
     outline="")
 
 canvas.create_rectangle(
-    152.0,
-    416.0,
-    384.0,
-    451.0,
-    fill="#D9D9D9",
-    outline="")
-
-def on_enter_key(event):
-    next_button.invoke()
-
-
-
-next_button = Button(window, text="Login", command=open_page2, width=8, bg="#333333", fg="white")
-next_button.place(x=441, y=387)
-window.bind("Return",on_enter_key)
-# button_image_1 = PhotoImage(
-#     file=relative_to_assets("button_1.png"))
-# button_1 = Button(
-#     image=button_image_1,
-#     borderwidth=0,
-#     highlightthickness=0,
-#     command=open_page2,
-#     relief="flat"
-# )
-# button_1.place(
-#     x=441.0,
-#     y=387.0,
-#     width=41.0,
-#     height=37.0
-# )
-
-
-canvas.create_rectangle(
-    188.0,
-    361.0,
-    384.0,
-    394.0,
-    fill="#A7A5A5",
-    outline="")
-
-canvas.create_rectangle(
-    188.0,
-    417.0,
-    384.0,
-    450.0,
+    383.0,
+    238.0,
+    579.0,
+    271.0,
     fill="#A7A5A5",
     outline="")
 
 entry_image_1 = PhotoImage(
     file=relative_to_assets("entry_1.png"))
 entry_bg_1 = canvas.create_image(
-    290.5,
-    377.0,
+    483.5,
+    255.0,
     image=entry_image_1
 )
 entry_1 = Entry(
@@ -156,17 +106,33 @@ entry_1 = Entry(
     highlightthickness=0
 )
 entry_1.place(
-    x=197.0,
-    y=362.0,
+    x=390.0,
+    y=240.0,
     width=187.0,
     height=28.0
 )
 
+canvas.create_rectangle(
+    347.0,
+    301.0,
+    579.0,
+    336.0,
+    fill="#D9D9D9",
+    outline="")
+
+canvas.create_rectangle(
+    383.0,
+    302.0,
+    579.0,
+    335.0,
+    fill="#A7A5A5",
+    outline="")
+
 entry_image_2 = PhotoImage(
     file=relative_to_assets("entry_2.png"))
 entry_bg_2 = canvas.create_image(
-    290.5,
-    433.0,
+    483.5,
+    319.0,
     image=entry_image_2
 )
 entry_2 = Entry(
@@ -177,8 +143,8 @@ entry_2 = Entry(
     show="*"
 )
 entry_2.place(
-    x=197.0,
-    y=418.0,
+    x=390.0,
+    y=304.0,
     width=187.0,
     height=28.0
 )
@@ -186,17 +152,28 @@ entry_2.place(
 image_image_3 = PhotoImage(
     file=relative_to_assets("image_3.png"))
 image_3 = canvas.create_image(
-    169.0,
-    376.0,
+    365.0,
+    322.0,
     image=image_image_3
 )
 
 image_image_4 = PhotoImage(
     file=relative_to_assets("image_4.png"))
 image_4 = canvas.create_image(
-    168.0,
-    435.0,
+    365.0,
+    255.0,
     image=image_image_4
+)
+
+next_button = Button(window, text="Login", command=open_page2, width=8, bg="#333333", fg="white")
+next_button.place(x=424, y=377)
+
+image_image_5 = PhotoImage(
+    file=relative_to_assets("image_5.png"))
+image_5 = canvas.create_image(
+    158.0,
+    371.0,
+    image=image_image_5
 )
 window.resizable(False, False)
 window.mainloop()

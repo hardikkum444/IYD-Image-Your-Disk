@@ -3,8 +3,6 @@ from pathlib import Path
 import subprocess
 from tkinter import *
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-# from tkinter import *
-# Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
 
 
@@ -81,7 +79,6 @@ def on_checkbox_click():
 raw_var = IntVar()
 dd_var = IntVar()
 
-# Create checkbuttons
 checkbutton_raw = Checkbutton(
     window,
     text="RAW",

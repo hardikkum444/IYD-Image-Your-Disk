@@ -13,6 +13,11 @@ def create_image():
     # sys.path.append("build")
     import gui3
 
+def gen_report():
+    window.destroy()
+    import sys
+    import gui5
+
 def center_window(window,height=600,width=500):
     window.update_idletasks()
     screen_width = window.winfo_screenwidth()
@@ -136,6 +141,7 @@ button_4 = Button(
     highlightthickness=0,
     highlightbackground="#6C6C6C",
     relief="flat",
+    command=gen_report,
     font=large_font,
     bg="#6C6C6C",
     fg="white"

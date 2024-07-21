@@ -2,7 +2,7 @@ from pathlib import Path
 import threading
 # from tkinter import *
 # Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog, Label
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog, Label, messagebox
 import subprocess
 import createim
 import tkinter as tk
@@ -48,7 +48,6 @@ button_1 = Button(
     image=button_image_1,
     borderwidth=0,
     highlightthickness=0,
-    command=lambda: print("button_1 clicked"),
     relief="flat"
 )
 button_1.place(
@@ -109,14 +108,14 @@ entry_bg_1 = canvas.create_image(
 def browse_file1():
     file_path = filedialog.askopenfilename()
     if file_path:
-        # entry_1.delete(0, Tk.END)  # Clear any existing text
-        entry_1.insert(0, file_path)  # Insert the selected file path
+        # entry_1.delete(0, Tk.END)
+        entry_1.insert(0, file_path)
 
 def browse_file3():
     file_path = filedialog.askdirectory()
     if file_path:
-        # entry_1.delete(0, Tk.END)  # Clear any existing text
-        entry_3.insert(0, file_path)  # Insert the selected file path
+        # entry_1.delete(0, Tk.END)
+        entry_3.insert(0, file_path)
 
 
 
@@ -186,15 +185,50 @@ entry_3.place(
     height=31.0
 )
 
-final_name = entry_2.get()+"/"+entry_3.get()
+
 
 def main_win():
+
+    task1_completed = threading.Event()
+    task2_completed = threading.Event()
+
+    def update_progress_label(text):
+        progress_label.config(text=text)
+
+    def update_progress_bar():
+        progress_bar_1.start(20)
+
+    def stop_progress_bar():
+        progress_bar_1.stop()
+
+    def close_window():
+        window.destroy()
+
     def create_image_task():
-            progress_bar.start(10)
-            start, end, md5, sh1 = createim.create_image(entry_1.get(), final_name)
-            progress_label.config(text="Completed!")
-            progress_bar.stop()
+        window.after(0, update_progress_bar)
+        final_name = entry_3.get()+"/"+entry_2.get()
+        start, end = createim.create_image(entry_1.get(), final_name)
+        window.after(0, lambda: update_progress_label("Image creation completed!"))
+        # window.after(0, stop_progress_bar)
+        task1_completed.set()
+
+    def gen_hash():
+        window.after(0, update_progress_bar)
+        print("Generating hash")
+        drive_md5, drive_sha1 = createim.compute_drive_hash(entry_1.get())
+        window.after(0, lambda: update_progress_label("Hash generation completed!"))
+        # window.after(0, stop_progress_bar)
+        task2_completed.set()
+
+    def check_tasks():
+        if task1_completed.is_set() and task2_completed.is_set():
+            stop_progress_bar()
+            progress_label.config(text="Tasks completed. Close the window.")
+            # progress_bar_1.bind("<Button-1>", lambda event: close_window())
+            done=True
             window.destroy()
+        else:
+            window.after(100, check_tasks)
 
     window = tk.Tk()
     window.title("IYD-Creating Image")
@@ -207,17 +241,32 @@ def main_win():
     progress_label = Label(window, text="Progressing...", font=("Arial", 12))
     progress_label.pack(pady=10)
 
-    progress_bar = ttk.Progressbar(window, style="TProgressbar", orient="horizontal", length=250, mode="indeterminate")
-    progress_bar.pack(pady=20)
+    progress_bar_1 = ttk.Progressbar(window, style="TProgressbar", orient="horizontal", length=250, mode="indeterminate")
+    progress_bar_1.pack(pady=20)
 
-    threading.Thread(target=create_image_task).start()
+    t1 = threading.Thread(target=create_image_task)
+    t2 = threading.Thread(target=gen_hash)
+
+    t1.start()
+    t2.start()
+
+    window.after(100, check_tasks)
 
     window.mainloop()
 
+done=False
+
 def on_next_click():
-    print("Next button clicked")
-    # createim.create_image(entry_1.get(),entry_2.get(),entry_2.get())
-    main_win()
+    if done==True:
+        import sys
+        window.destroy()
+        import gui6
+
+    else:
+        if len(entry_1.get()) == 0 or len(entry_2.get()) == 0 or len(entry_3.get()) == 0:
+            messagebox.showwarning("Warning", "Please enter all the fields!")
+        else:
+            main_win()
 
 def on_back_click():
     window.destroy()

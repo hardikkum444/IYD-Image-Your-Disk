@@ -1,12 +1,13 @@
 from pathlib import Path
 import subprocess, os
-
+from tkinter import *
+import tkinter as tk
+import threading
+from tkinter import ttk
 from jinja2.nodes import Output
 import genrep
 import webbrowser
-# from tkinter import *
-# Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog, Label
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog, Label, messagebox, Checkbutton, simpledialog
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"/home/man44/Documents/imager/landing/assets5/frame0")
@@ -157,15 +158,73 @@ entry_2.place(
 def browse_file1():
     file_path = filedialog.askopenfilename()
     if file_path:
-        # entry_1.delete(0, Tk.END)  # Clear any existing text
-        entry_2.insert(0, file_path)  # Insert the selected file path
+        # entry_1.delete(0, Tk.END)
+        entry_2.insert(0, file_path)
 
 def browse_file3():
     file_path = filedialog.askdirectory()
     if file_path:
-        # entry_1.delete(0, Tk.END)  # Clear any existing text
-        entry_1.insert(0, file_path)  # Insert the selected file path
+        # entry_1.delete(0, Tk.END)
+        entry_1.insert(0, file_path)
 
+
+def main_win():
+
+    task1_completed = threading.Event()
+
+    def update_progress_label(text):
+        progress_label.config(text=text)
+
+    def update_progress_bar():
+        progress_bar_1.start(20)
+
+    def stop_progress_bar():
+        progress_bar_1.stop()
+
+    def on_gen_click():
+        window1.after(0, update_progress_bar)
+        vol_loc = entry_2.get()
+        save_loc = entry_1.get()
+        window1.after(0, lambda: update_progress_label("Generating drive hash for report..."))
+        physical_block_size, logical_block_size, total_sectors, partition_information, model, serial_number, total_used_bytes, partition_table = genrep.get_info(vol_loc)
+        print("Generating hash")
+        drive_md5, drive_sha1 = genrep.calculate_hash(vol_loc)
+        html_file_path = save_loc + "/disk_imaging_report.html"
+        genrep.generate_html_report(html_file_path,"NA","NA", "NA","NA", "NA", "NA", "NA", "NA", "NA", physical_block_size, logical_block_size, total_sectors,"-", partition_information, model, serial_number,partition_table,total_used_bytes,total_sectors, drive_md5, drive_sha1,"NA","NA","NA","NA","NA","NA")
+        task1_completed.set()
+
+
+    def check_tasks():
+
+        if task1_completed.is_set():
+            stop_progress_bar()
+            window1.destroy()
+            finish_gen()
+
+        else:
+            window1.after(100, check_tasks)
+
+    window1 = tk.Tk()
+    window1.title("IYD-Generating report")
+    center_window(window1)
+    window1.geometry("300x150")
+
+    style = ttk.Style()
+    style.configure("TProgressbar", thickness=20)
+
+    progress_label = Label(window1, text="Progressing...", font=("Arial", 12))
+    progress_label.pack(pady=10)
+
+    progress_bar_1 = ttk.Progressbar(window1, style="TProgressbar", orient="horizontal", length=250, mode="indeterminate")
+    progress_bar_1.pack(pady=20)
+
+    t1 = threading.Thread(target=on_gen_click)
+    t1.start()
+
+    window1.after(100, check_tasks)
+
+
+    window1.mainloop()
 
 
 def on_gen_click():
@@ -176,10 +235,6 @@ def on_gen_click():
     drive_md5, drive_sha1 = genrep.calculate_hash(vol_loc)
     html_file_path = save_loc + "/disk_imaging_report.html"
     genrep.generate_html_report(html_file_path,"NA","NA", "NA","NA", "NA", "NA", "NA", "NA", "NA", physical_block_size, logical_block_size, total_sectors,"", partition_information, model, serial_number,partition_table,total_used_bytes,total_sectors, drive_md5, drive_sha1,"NA","NA","","","NA","NA")
-    # try:
-    #     webbrowser.open(save_loc+"/disk_imaging_report.html")
-    # except Exception as e:
-    #     print(f"Error opening HTML file: {e}")
 
     fire_command = 'sudo -u $USER firefox '+html_file_path
     os.system(fire_command)
@@ -202,13 +257,24 @@ browse_button2.pack(pady=10)
 browse_button2.place(x=539, y=316)
 
 
-gen_button = Button(window, text="Generate Report", command=on_gen_click, width=13, bg="#333333", fg="white")
+def on_next_click1():
+
+    if len(entry_1.get()) == 0 or len(entry_2.get())==0:
+        messagebox.showwarning("Warning", "Please enter all the fields!")
+
+    else:
+        main_win()
+
+gen_button = Button(window, text="Generate Report", command=on_next_click1, width=13, bg="#333333", fg="white")
 gen_button.place(x=435, y=431)
 
 back_button = Button(window, text="Back", command=on_back_click, width=10, bg="#333333", fg="white")
 back_button.place(x=295, y=431)
 
-
+def finish_gen():
+    save_loc = entry_1.get()
+    messagebox.showwarning("Warning", "Report saved at: "+save_loc)
+    window.destroy()
 
 window.resizable(False, False)
 window.mainloop()

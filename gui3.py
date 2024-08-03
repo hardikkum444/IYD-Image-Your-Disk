@@ -7,7 +7,7 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
 
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"/home/man44/Documents/imager/landing/assets3/frame0")
+ASSETS_PATH = OUTPUT_PATH / Path(r"assets3/frame0")
 
 def center_window(window,height=600,width=500):
     window.update_idletasks()
@@ -127,7 +127,8 @@ def on_back_click():
     import sys
     # sys.path.append("build")
     # import gui2
-    subprocess.run(["python3", "gui2.py"])
+    # subprocess.run(["python3", "gui2.py"])
+    subprocess.run(["sudo", "myenv/bin/python3", "gui2.py"])
 
 
 next_button = Button(window, text="Next", command=on_next_click, width=10, bg="#333333", fg="white")

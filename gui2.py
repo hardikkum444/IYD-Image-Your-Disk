@@ -1,11 +1,9 @@
 from pathlib import Path
-# from tkinter import *
-# Explicit imports to satisfy Flake8
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from tkinter import font as tkfont
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"/home/man44/Documents/imager/landing/assets2/frame0")
+ASSETS_PATH = OUTPUT_PATH / Path(r"assets2/frame0")
 
 def create_image():
     window.destroy()
@@ -17,6 +15,17 @@ def gen_report():
     window.destroy()
     import sys
     import gui5
+
+def mount_image():
+    window.destroy()
+    import sys
+    import gui7
+
+def decrypt_image():
+    window.destroy()
+    import sys
+    import gui8
+
 
 def center_window(window,height=600,width=500):
     window.update_idletasks()
@@ -100,6 +109,7 @@ button_2 = Button(
     text="DECRYPT RAW IMAGE",
     highlightthickness=0,
     highlightbackground="#6C6C6C",
+    command=decrypt_image,
     relief="flat",
     font=large_font,
     bg="#6C6C6C",
@@ -121,6 +131,7 @@ button_3 = Button(
     highlightthickness=0,
     highlightbackground="#6C6C6C",
     relief="flat",
+    command=mount_image,
     font=large_font,
     bg="#6C6C6C",
     fg="white"

@@ -6,10 +6,12 @@ from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog, Lab
 import subprocess
 import createim
 import tkinter as tk
+import json
 from tkinter import ttk
+from datetime import datetime
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"/home/man44/Documents/imager/landing/assets4/frame0")
+ASSETS_PATH = OUTPUT_PATH / Path(r"assets4/frame0")
 
 def center_window(window,height=600,width=500):
     window.update_idletasks()
@@ -304,7 +306,7 @@ def main_win():
             window.after(0, lambda: update_progress_label("encryption completed..."))
 
         # return image_start, image_end, image_md5, image_sha1
-        result_queue1.put((image_start, image_end, image_md5, image_sha1, entry_3.get()))
+        result_queue1.put((image_start, image_end, image_md5, image_sha1, entry_1.get(), entry_2.get(), entry_3.get()))
         task1_completed.set()
 
     def gen_hash():
@@ -320,8 +322,10 @@ def main_win():
         if task1_completed.is_set() and task2_completed.is_set():
             stop_progress_bar()
             progress_label.config(text="Tasks completed. Close the window.")
+            window.after(1000, window.destroy)
             on_next_click2()
-            window.destroy()
+
+            # window.destroy()
 
         else:
             window.after(100, check_tasks)
@@ -368,17 +372,41 @@ def on_next_click1():
 
 def on_next_click2():
     import sys
-    image_start, image_end, image_md5, image_sha1 = result_queue1.get()
+    image_start, image_end, image_md5, image_sha1, volume_loc, image_loc, saving_loc = result_queue1.get()
     drive_md5, drive_sha1 = result_queue2.get()
-    print(image_start, image_end, image_md5, image_sha1, drive_md5, drive_sha1)
+    # print(image_start, image_end, image_md5, image_sha1, drive_md5, drive_sha1)
+
+    # image_start_str = image_start.strftime('%Y-%m-%d %H:%M:%S') if isinstance(image_start, datetime) else str(image_start)
+    # image_end_str = image_end.strftime('%Y-%m-%d %H:%M:%S') if isinstance(image_end, datetime) else str(image_end)
+
+    image_start_str = str(image_start)
+    image_end_str = str(image_end)
+
+
+    results = {
+            'image_start': image_start_str,
+            'image_end': image_end_str,
+            'image_md5': image_md5,
+            'image_sha1': image_sha1,
+            'volume_loc': volume_loc,
+            'image_loc': image_loc,
+            'saving_loc': saving_loc,
+            'drive_md5': drive_md5,
+            'drive_sha1': drive_sha1
+        }
+    with open("results.json", "w") as file:
+        json.dump(results, file)
+
     window.destroy()
     import gui6
+
 
 
 def on_back_click():
     window.destroy()
     import sys
-    subprocess.run(["python3", "gui3.py"])
+    # subprocess.run(["python3", "gui3.py"])
+    subprocess.run(["sudo", "myenv/bin/python3", "gui3.py"])
 
 
 

@@ -1,10 +1,13 @@
 from pathlib import Path
 from tkinter import *
+import json
+from tkinter import messagebox
+import genrep
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-
+# from gui4 import result_queue1, result_queue2
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"/home/man44/Documents/imager/landing/assets6/frame0")
+ASSETS_PATH = OUTPUT_PATH / Path(r"assets6/frame0")
 
 
 def center_window(window,height=600,width=500):
@@ -25,6 +28,25 @@ center_window(window)
 window.geometry("600x500")
 window.configure(bg = "#545252")
 
+# image_start, image_end, image_md5, image_sha1, volume_loc = result_queue1.get()
+# drive_md5, drive_sha1 = result_queue2.get()
+
+
+
+with open("results.json","r") as file:
+    results = json.load(file)
+
+    image_start = results['image_start']
+    image_end = results['image_end']
+    image_md5 = results['image_md5']
+    image_sha1 = results['image_sha1']
+    volume_loc = results['volume_loc']
+    image_loc = results['image_loc']
+    saving_loc = results['saving_loc']
+    drive_md5 = results['drive_md5']
+    drive_sha1 = results['drive_sha1']
+
+print(image_start, image_end, image_md5, image_sha1, drive_md5, drive_sha1, volume_loc, image_loc, saving_loc)
 
 canvas = Canvas(
     window,
@@ -184,11 +206,40 @@ def exit_win():
     window.destroy()
 
 
-next_button = Button(window, text="Next", command=on_next_click, width=10, bg="#333333", fg="white")
+def generate():
+
+    html_file_path = saving_loc + "/disk_imaging_report.html"
+    print(html_file_path)
+    physical_block_size, logical_block_size, total_sectors, partition_information, model, serial_number, total_used_bytes, partition_table = genrep.get_info(volume_loc)
+    print(image_start, image_end, image_md5, image_sha1, drive_md5, drive_sha1, volume_loc, image_loc, saving_loc)
+    extension = image_loc.split('.')[-1]
+    case_no = entry_1.get() or "NA"
+    evd_no = entry_2.get() or "NA"
+    desc = entry_3.get() or "NA"
+    examiner = entry_4.get() or "NA"
+    notes = entry_5.get() or "NA"
+
+    if(image_md5==drive_md5 and image_sha1==drive_sha1):
+        verf = "Verified"
+    else:
+        verf = "Not verified"
+
+    print(verf)
+
+    genrep.generate_html_report(html_file_path,image_loc,image_start, image_end,extension, case_no, evd_no, desc, examiner, notes, physical_block_size, logical_block_size, total_sectors,"-", partition_information, model, serial_number,partition_table,total_used_bytes,total_sectors, drive_md5, drive_sha1,"NA","NA",image_start, verf,image_md5,image_sha1)
+
+    finish()
+
+
+next_button = Button(window, text="Next", command=generate, width=10, bg="#333333", fg="white")
 next_button.place(x=461, y=462)
 
 back_button = Button(window, text="Exit", command=exit_win, width=10, bg="#333333", fg="white")
 back_button.place(x=297, y=462)
+
+def finish():
+    messagebox.showinfo("Imaging process completed successfully please check "+image_loc)
+    window.destroy()
 
 window.resizable(False, False)
 window.mainloop()

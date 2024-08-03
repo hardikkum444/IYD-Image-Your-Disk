@@ -1,0 +1,9 @@
+customtkinter==5.2.2
+darkdetect==0.8.0
+Jinja2==3.1.4
+MarkupSafe==2.1.5
+packaging==24.1
+pillow==10.4.0
+pytsk3==20231007
+tk==0.1.0
+tqdm==4.66.4

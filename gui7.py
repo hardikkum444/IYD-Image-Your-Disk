@@ -148,7 +148,7 @@ def on_next_click1():
     try:
         subprocess.run(command, check=True)
         print("Mount successful.")
-        messagebox.showinfo("Mounted successfully, please check /mnt")
+        messagebox.showwarning("Mounted successfully, please check /mnt")
         window.destroy()
     except subprocess.CalledProcessError as e:
         print(f"Error mounting: {e}")
@@ -159,7 +159,8 @@ def on_next_click1():
 def on_back_click():
     window.destroy()
     import sys
-    subprocess.run(["python3", "gui2.py"])
+    # subprocess.run(["python3", "gui2.py"])
+    subprocess.run(["sudo", "myenv/bin/python3", "gui2.py"])
 
 
 def on_checkbox_click1():

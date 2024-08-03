@@ -10,7 +10,7 @@ import webbrowser
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog, Label, messagebox, Checkbutton, simpledialog
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"/home/man44/Documents/imager/landing/assets5/frame0")
+ASSETS_PATH = OUTPUT_PATH / Path(r"assets5/frame0")
 
 
 def relative_to_assets(path: str) -> Path:
@@ -245,7 +245,8 @@ def on_back_click():
     import sys
     # sys.path.append("build")
     # import gui2
-    subprocess.run(["python3", "gui2.py"])
+    # subprocess.run(["python3", "gui2.py"])
+    subprocess.run(["sudo", "myenv/bin/python3", "gui2.py"])
 
 
 browse_button = Button(window, text="BF",fg="white",width=1,bg="#333333", command=browse_file1)

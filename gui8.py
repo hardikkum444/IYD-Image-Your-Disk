@@ -191,7 +191,8 @@ def on_next_click1():
 def on_back_click():
     window.destroy()
     import sys
-    subprocess.run(["python3", "gui2.py"])
+    # subprocess.run(["python3", "gui2.py"])
+    subprocess.run(["sudo", "myenv/bin/python3", "gui2.py"])
 
 def finish():
     window.destroy()

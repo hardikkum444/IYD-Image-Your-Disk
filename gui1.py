@@ -1,13 +1,12 @@
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
 from pathlib import Path
+from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 import hashlib
 from PIL import Image, ImageTk
-# from tkinter import *
-# Explicit imports to satisfy Flake8
-from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
-
 
 OUTPUT_PATH = Path(__file__).parent
-ASSETS_PATH = OUTPUT_PATH / Path(r"/home/man44/Documents/imager/landing/assets1/frame0")
+ASSETS_PATH = OUTPUT_PATH / Path(r"assets1/frame0")
+
 
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
@@ -38,7 +37,6 @@ def open_page2():
         window_position = (window.winfo_x(), window.winfo_y())
         window.destroy()
         import sys
-        # sys.path.append("build")
         import gui2
     else:
         messagebox.showwarning("Warning", "Inavlid Username Password!")
@@ -46,13 +44,14 @@ def open_page2():
 window = Tk()
 window.wm_iconname("Image your disk")
 window.title("IYD")
-im = Image.open('assets0/favicon.ico')
+im = Image.open('assets0/drive2.ico')
 photo = ImageTk.PhotoImage(im)
 window.wm_iconphoto(True, photo)
-# window.wm_iconname("IYD")
+window.wm_iconname("IYD")
 window.configure(bg = "#C4C4C4")
 center_window(window)
 window.geometry("600x500")
+
 
 canvas = Canvas(
     window,
@@ -65,14 +64,6 @@ canvas = Canvas(
 )
 
 canvas.place(x = 0, y = 0)
-image_image_1 = PhotoImage(
-    file=relative_to_assets("image_1.png"))
-image_1 = canvas.create_image(
-    170.0,
-    142.0,
-    image=image_image_1
-)
-
 canvas.create_rectangle(
     325.0,
     0.0,
@@ -81,12 +72,12 @@ canvas.create_rectangle(
     fill="#222222",
     outline="")
 
-image_image_2 = PhotoImage(
-    file=relative_to_assets("image_2.png"))
-image_2 = canvas.create_image(
+image_image_1 = PhotoImage(
+    file=relative_to_assets("image_1.png"))
+image_1 = canvas.create_image(
     463.0,
     172.0,
-    image=image_image_2
+    image=image_image_1
 )
 
 canvas.create_rectangle(
@@ -152,8 +143,7 @@ entry_2 = Entry(
     bd=0,
     bg="#A7A5A5",
     fg="#000716",
-    highlightthickness=0,
-    show="*"
+    highlightthickness=0
 )
 entry_2.place(
     x=390.0,
@@ -162,31 +152,48 @@ entry_2.place(
     height=28.0
 )
 
+image_image_2 = PhotoImage(
+    file=relative_to_assets("image_2.png"))
+image_2 = canvas.create_image(
+    365.0,
+    322.0,
+    image=image_image_2
+)
+
 image_image_3 = PhotoImage(
     file=relative_to_assets("image_3.png"))
 image_3 = canvas.create_image(
     365.0,
-    322.0,
+    255.0,
     image=image_image_3
 )
 
 image_image_4 = PhotoImage(
     file=relative_to_assets("image_4.png"))
 image_4 = canvas.create_image(
-    365.0,
-    255.0,
+    159.0,
+    377.0,
     image=image_image_4
+)
+
+canvas.create_rectangle(
+    431.0,
+    377.0,
+    500.0,
+    406.0,
+    fill="#D9D9D9",
+    outline="")
+
+image_image_5 = PhotoImage(
+    file=relative_to_assets("image_5.png"))
+image_5 = canvas.create_image(
+    162.0,
+    154.0,
+    image=image_image_5
 )
 
 next_button = Button(window, text="Login", command=open_page2, width=8, bg="#333333", fg="white")
 next_button.place(x=424, y=377)
 
-image_image_5 = PhotoImage(
-    file=relative_to_assets("image_5.png"))
-image_5 = canvas.create_image(
-    158.0,
-    371.0,
-    image=image_image_5
-)
 window.resizable(False, False)
 window.mainloop()

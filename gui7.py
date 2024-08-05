@@ -3,6 +3,7 @@ import subprocess, os
 from tkinter import *
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog, Label, messagebox, Checkbutton, simpledialog
+from PIL import Image, ImageTk
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets7/frame0")
@@ -18,10 +19,14 @@ def center_window(window,height=600,width=500):
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-
 window = Tk()
-window.title("IYD Mounting Image File")
 center_window(window)
+window.wm_iconname("Image your disk")
+window.title("IYD Mounting Image File")
+im = Image.open('assets0/favicon.ico')
+photo = ImageTk.PhotoImage(im)
+window.wm_iconphoto(True, photo)
+window.wm_iconname("IYD")
 window.geometry("600x500")
 window.configure(bg = "#545252")
 

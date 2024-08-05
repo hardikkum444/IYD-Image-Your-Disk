@@ -8,6 +8,7 @@ from jinja2.nodes import Output
 import genrep
 import webbrowser
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog, Label, messagebox, Checkbutton, simpledialog
+from PIL import Image, ImageTk
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets5/frame0")
@@ -25,15 +26,16 @@ def center_window(window,height=600,width=500):
     y = (screen_height - height) // 2
     window.geometry(f"{width}x{height}+{x}+{y}")
 
-
 window = Tk()
-
+center_window(window)
+window.wm_iconname("Image your disk")
+window.title("IYD")
+im = Image.open('assets0/favicon.ico')
+photo = ImageTk.PhotoImage(im)
+window.wm_iconphoto(True, photo)
+window.wm_iconname("IYD")
 window.geometry("600x500")
 window.configure(bg = "#545252")
-window.title("IYD")
-center_window(window)
-window.geometry("600x500")
-
 
 canvas = Canvas(
     window,

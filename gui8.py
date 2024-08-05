@@ -1,6 +1,7 @@
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, filedialog, Label, messagebox, Checkbutton, simpledialog
 import subprocess
+from PIL import Image, ImageTk
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets8/frame0")
@@ -19,6 +20,12 @@ def relative_to_assets(path: str) -> Path:
 
 window = Tk()
 center_window(window)
+window.wm_iconname("Image your disk")
+window.title("IYD Decrypting Image")
+im = Image.open('assets0/favicon.ico')
+photo = ImageTk.PhotoImage(im)
+window.wm_iconphoto(True, photo)
+window.wm_iconname("IYD")
 window.geometry("600x500")
 window.configure(bg = "#545252")
 

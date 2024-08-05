@@ -4,7 +4,7 @@ import json
 from tkinter import messagebox
 import genrep
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
-# from gui4 import result_queue1, result_queue2
+from PIL import Image, ImageTk
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets6/frame0")
@@ -21,17 +21,16 @@ def center_window(window,height=600,width=500):
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-
 window = Tk()
-window.title("IYD Imaging Process")
 center_window(window)
+window.wm_iconname("Image your disk")
+window.title("IYD Imaging Process")
+im = Image.open('assets0/favicon.ico')
+photo = ImageTk.PhotoImage(im)
+window.wm_iconphoto(True, photo)
+window.wm_iconname("IYD")
 window.geometry("600x500")
 window.configure(bg = "#545252")
-
-# image_start, image_end, image_md5, image_sha1, volume_loc = result_queue1.get()
-# drive_md5, drive_sha1 = result_queue2.get()
-
-
 
 with open("results.json","r") as file:
     results = json.load(file)

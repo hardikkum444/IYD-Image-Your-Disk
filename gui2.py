@@ -1,6 +1,7 @@
 from pathlib import Path
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from tkinter import font as tkfont
+from PIL import Image, ImageTk
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets2/frame0")
@@ -39,15 +40,16 @@ def center_window(window,height=600,width=500):
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-
 window = Tk()
+window.wm_iconname("Image your disk")
 window.title("IYD")
-
+im = Image.open('assets0/favicon.ico')
+photo = ImageTk.PhotoImage(im)
+window.wm_iconphoto(True, photo)
+window.wm_iconname("IYD")
 window.configure(bg = "#202020")
 center_window(window)
 window.geometry("600x500")
-
-
 
 
 canvas = Canvas(

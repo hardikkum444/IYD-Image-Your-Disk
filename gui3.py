@@ -4,7 +4,7 @@ import subprocess
 from tkinter import *
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage
 from tkinter import Tk, Canvas, Entry, Text, Button, PhotoImage, messagebox
-
+from PIL import Image, ImageTk
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets3/frame0")
@@ -23,11 +23,15 @@ def relative_to_assets(path: str) -> Path:
 
 
 window = Tk()
-window.title("IYD Imaging Process")
 center_window(window)
+window.wm_iconname("Image your disk")
+window.title("IYD Imaging Process")
+im = Image.open('assets0/favicon.ico')
+photo = ImageTk.PhotoImage(im)
+window.wm_iconphoto(True, photo)
+window.wm_iconname("IYD")
 window.geometry("600x500")
 window.configure(bg = "#545252")
-
 
 canvas = Canvas(
     window,

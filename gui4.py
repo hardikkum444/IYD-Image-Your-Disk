@@ -9,6 +9,7 @@ import tkinter as tk
 import json
 from tkinter import ttk
 from datetime import datetime
+from PIL import Image, ImageTk
 
 OUTPUT_PATH = Path(__file__).parent
 ASSETS_PATH = OUTPUT_PATH / Path(r"assets4/frame0")
@@ -25,10 +26,14 @@ def center_window(window,height=600,width=500):
 def relative_to_assets(path: str) -> Path:
     return ASSETS_PATH / Path(path)
 
-
 window = Tk()
-window.title("IYD Imaging Process")
 center_window(window)
+window.wm_iconname("Image your disk")
+window.title("IYD Imaging Process")
+im = Image.open('assets0/favicon.ico')
+photo = ImageTk.PhotoImage(im)
+window.wm_iconphoto(True, photo)
+window.wm_iconname("IYD")
 window.geometry("600x500")
 window.configure(bg = "#545252")
 
